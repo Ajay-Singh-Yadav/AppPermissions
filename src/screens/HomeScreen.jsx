@@ -37,7 +37,6 @@ const CameraScreen = () => {
         return;
       }
 
-      // Android-specific: request storage permission
       if (Platform.OS === 'android') {
         const granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
@@ -52,7 +51,6 @@ const CameraScreen = () => {
     })();
   }, []);
 
-  // Capture photo
   const takePhoto = async () => {
     if (cameraRef.current) {
       try {
@@ -64,12 +62,10 @@ const CameraScreen = () => {
     }
   };
 
-  // Flip front/back camera
   const flipCamera = () => {
     setCameraType(prev => (prev === 'back' ? 'front' : 'back'));
   };
 
-  // Show permission/loading message
   if (!hasPermission) {
     return (
       <View style={styles.centered}>
@@ -96,12 +92,10 @@ const CameraScreen = () => {
         photo={true}
       />
 
-      {/* Flip Camera Button */}
       <TouchableOpacity style={styles.flipButton} onPress={flipCamera}>
         <Ionicons name="camera-reverse-outline" size={32} color="#fff" />
       </TouchableOpacity>
 
-      {/* Take Photo Button */}
       <View style={styles.buttonContainer}>
         <Button title="Take Photo" onPress={takePhoto} />
       </View>
