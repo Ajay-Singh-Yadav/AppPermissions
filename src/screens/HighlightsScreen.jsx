@@ -1,14 +1,14 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 
-const PickDocumentScreen = () => {
+const HighlightsScreen = () => {
   return (
     <View>
-      <Text>PickDocumentScreen</Text>
+      <Text>HighlightsScreen</Text>
     </View>
   );
 };
 
-export default PickDocumentScreen;
+export default HighlightsScreen;
 
 const styles = StyleSheet.create({});
