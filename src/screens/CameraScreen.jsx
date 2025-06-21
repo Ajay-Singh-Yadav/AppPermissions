@@ -10,10 +10,16 @@ import {
   Linking,
   TouchableOpacity,
 } from 'react-native';
+
 import {Camera, useCameraDevice} from 'react-native-vision-camera';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {useRoute, useNavigation} from '@react-navigation/native';
+
+import {pick, types} from '@react-native-documents/picker';
 
 const CameraScreen = () => {
+  const route = useRoute();
+  const navigation = useNavigation();
   const cameraRef = useRef(null);
   const [hasPermission, setHasPermission] = useState(false);
   const [cameraActive, setCameraActive] = useState(false);
@@ -55,7 +61,12 @@ const CameraScreen = () => {
     if (cameraRef.current) {
       try {
         const photo = await cameraRef.current.takePhoto();
-        Alert.alert('Photo Captured', JSON.stringify(photo, null, 2));
+        const photoUri = 'file://' + photo.path;
+
+        if (route.params?.onCapture) {
+          route.params.onCapture(photoUri);
+        }
+        navigation.goBack();
       } catch (error) {
         console.error('Capture failed:', error);
       }
@@ -82,6 +93,29 @@ const CameraScreen = () => {
     );
   }
 
+  const pickImageFromGallery = async () => {
+    try {
+      const [file] = await pick({
+        type: [types.images], // images only
+      });
+
+      if (file) {
+        const selectedImageUri = file.uri;
+
+        if (route.params?.onCapture) {
+          route.params.onCapture(selectedImageUri); // ✅ set profile image
+        }
+
+        navigation.goBack(); // ✅ return to profile screen
+      }
+    } catch (err) {
+      if (err.code !== 'DOCUMENT_PICKER_CANCELED') {
+        Alert.alert('Error', 'Unable to pick image');
+        console.error(err);
+      }
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Camera
@@ -96,9 +130,17 @@ const CameraScreen = () => {
         <Ionicons name="camera-reverse-outline" size={32} color="#fff" />
       </TouchableOpacity>
 
-      <View style={styles.buttonContainer}>
-        <Button title="Take Photo" onPress={takePhoto} />
-      </View>
+      <TouchableOpacity onPress={takePhoto} style={styles.outerRing}>
+        <View style={styles.innerCircle}>
+          <Ionicons name="camera" size={28} color="#fff" />
+        </View>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.galleryButton}
+        onPress={pickImageFromGallery}>
+        <Ionicons name="images-outline" size={24} color="#fff" />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -120,11 +162,37 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
   },
-  buttonContainer: {
+  outerRing: {
     position: 'absolute',
     bottom: 40,
     alignSelf: 'center',
+    width: 90,
+    height: 90,
+    borderRadius: 45,
+    borderWidth: 2,
+    borderColor: '#fff', // Ring color
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'transparent',
   },
+
+  innerCircle: {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    backgroundColor: 'rgba(0, 0, 0, 0.82)', // Inner background
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  galleryButton: {
+    position: 'absolute',
+    bottom: 40,
+    left: 30,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    padding: 12,
+    borderRadius: 50,
+  },
+
   flipButton: {
     position: 'absolute',
     bottom: 40,

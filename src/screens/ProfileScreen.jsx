@@ -15,7 +15,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import Geolocation from 'react-native-geolocation-service';
 import {request, PERMISSIONS, RESULTS} from 'react-native-permissions';
-import {useRoute} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 //Icons
@@ -23,10 +23,13 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const ProfileScreen = () => {
+  const imageSize = 200;
+  const navigation = useNavigation();
   const route = useRoute();
   const {contact} = route.params;
 
   const [location, setLocation] = useState(null);
+  const [profileImage, setProfileImage] = useState(null);
 
   // Location Permission
   const requestLocationPermission = async () => {
@@ -90,20 +93,37 @@ const ProfileScreen = () => {
 
         {/* Image Header */}
         <View style={styles.header}>
-          <Image
-            source={{
-              uri: 'https://cdn-icons-png.flaticon.com/512/706/706830.png',
-            }}
-            style={styles.avatar}
-          />
-          <View>
+          <View style={styles.avatarContainer}>
+            <Image
+              source={{
+                uri:
+                  profileImage ||
+                  'https://cdn-icons-png.flaticon.com/512/706/706830.png',
+              }}
+              style={[styles.avatar, {borderRadius: imageSize / 2}]}
+            />
+
+            {/* Camera icon overlay */}
+            <TouchableOpacity
+              style={styles.cameraIconButton}
+              onPress={() =>
+                navigation.navigate('Camera', {
+                  onCapture: uri => {
+                    setProfileImage(uri);
+                  },
+                })
+              }>
+              <Feather name="camera" size={24} color="#fff" />
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.nameContainer}>
             <Text style={styles.name}>{contact.displayName || 'Unnamed'}</Text>
-            {/* <Text style={styles.username}>
-              {' '}
-              {contact.phoneNumbers && contact.phoneNumbers.length > 0
+            <Text style={styles.username}>
+              {contact.phoneNumbers?.length > 0
                 ? contact.phoneNumbers[0].number
                 : 'No Number'}
-            </Text> */}
+            </Text>
           </View>
         </View>
 
@@ -152,17 +172,20 @@ const styles = StyleSheet.create({
     marginBottom: 50,
     justifyContent: 'center',
   },
-  avatar: {
-    width: 200,
-    height: 200,
-    borderRadius: 30,
-    marginRight: 15,
+
+  nameContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   name: {
-    fontSize: 35,
+    fontSize: 30,
     fontWeight: '600',
     color: '#fff',
-    marginTop: 30,
+    marginTop: 50,
+  },
+  username: {
+    color: '#fff',
+    fontSize: 15,
   },
   callSection: {
     flexDirection: 'row',
@@ -174,21 +197,30 @@ const styles = StyleSheet.create({
     backgroundColor: '',
     padding: 15,
   },
+  avatarContainer: {
+    position: 'relative',
+    width: 100,
+    height: 100,
+    marginBottom: 10,
+    marginTop: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  avatar: {
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+  },
+  cameraIconButton: {
+    position: 'absolute',
+    bottom: -40,
+    right: -30,
+    backgroundColor: 'gray',
+    borderRadius: 12,
+    padding: 6,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
 
 export default ProfileScreen;
-
-{
-  /* <View style={styles.locationContainer}>
-            <Button title="📍 Get Current Location" onPress={getLocation} />
-            {location ? (
-              <Text style={styles.locationText}>
-                Latitude: {location.coords.latitude}
-                {'\n'}
-                Longitude: {location.coords.longitude}
-              </Text>
-            ) : (
-              <Text style={styles.locationText}>Location not fetched yet.</Text>
-            )}
-          </View> */
-}
