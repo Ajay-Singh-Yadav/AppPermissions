@@ -21,6 +21,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 //Icons
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ProfileScreen = () => {
   const imageSize = 200;
@@ -45,6 +46,23 @@ const ProfileScreen = () => {
       return false;
     }
   };
+
+  const handleImageCapture = async uri => {
+    setProfileImage(uri);
+    await AsyncStorage.setItem(`profileImage_${contact.recordID}`, uri);
+  };
+
+  useEffect(() => {
+    const loadProfileImage = async () => {
+      const uri = await AsyncStorage.getItem(
+        `profileImage_${contact.recordID}`,
+      );
+      if (uri) {
+        setProfileImage(uri);
+      }
+    };
+    loadProfileImage();
+  }, [contact.recordID]);
 
   const getLocation = async () => {
     const hasPermission = await requestLocationPermission();
@@ -108,9 +126,7 @@ const ProfileScreen = () => {
               style={styles.cameraIconButton}
               onPress={() =>
                 navigation.navigate('Camera', {
-                  onCapture: uri => {
-                    setProfileImage(uri);
-                  },
+                  onCapture: handleImageCapture,
                 })
               }>
               <Feather name="camera" size={24} color="#fff" />
