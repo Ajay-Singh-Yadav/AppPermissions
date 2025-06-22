@@ -23,6 +23,9 @@ const ContactsScreen = () => {
   const navigation = useNavigation();
   const [contacts, setContacts] = useState([]);
 
+  const [searchContact, setSearchContact] = useState('');
+  const [filteredContacts, setFilteredContacts] = useState([]);
+
   // Request contact permission
   const requestContactPermission = async () => {
     try {
@@ -41,6 +44,19 @@ const ContactsScreen = () => {
       console.warn(err);
       return false;
     }
+  };
+
+  const handleSearch = text => {
+    if (!text) {
+      setFilteredContacts(contacts); // Reset if search is cleared
+      return;
+    }
+
+    const filtered = contacts.filter(contact =>
+      (contact.displayName || '').toLowerCase().includes(text.toLowerCase()),
+    );
+
+    setFilteredContacts(filtered);
   };
 
   // Load contacts
@@ -83,6 +99,8 @@ const ContactsScreen = () => {
         const finalContacts = [...sortedAtoZ, ...sortedRest];
 
         setContacts(finalContacts);
+
+        setFilteredContacts(finalContacts);
       })
       .catch(err => console.warn(err));
   };
@@ -134,6 +152,11 @@ const ContactsScreen = () => {
                 placeholder="Search contacts"
                 placeholderTextColor="#ccc"
                 style={styles.searchInput}
+                value={searchContact}
+                onChangeText={text => {
+                  setSearchContact(text);
+                  handleSearch(text);
+                }}
               />
             </View>
             <Image
@@ -142,7 +165,7 @@ const ContactsScreen = () => {
             />
           </View>
         }
-        data={contacts}
+        data={filteredContacts}
         keyExtractor={item => item.recordID}
         renderItem={renderContact}
         contentContainerStyle={styles.contentContainer}
