@@ -9,6 +9,7 @@ import {
   Platform,
   Alert,
   Button,
+  ScrollView,
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -21,7 +22,11 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 //Icons
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Entypo from 'react-native-vector-icons/Entypo';
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ContactSettings from '../components/ContactSettings';
 
 const ProfileScreen = () => {
   const imageSize = 200;
@@ -90,77 +95,142 @@ const ProfileScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Top Icons */}
-      <View style={styles.container}>
-        <View style={styles.TopIconsContainer}>
-          <TouchableOpacity>
-            <Ionicons name="arrow-back" size={24} color="white" />
-          </TouchableOpacity>
-          <View style={styles.subTopIconsContainer}>
-            <TouchableOpacity>
-              <Feather name="edit-3" size={20} color="#fff" />
+      <ScrollView
+        contentContainerStyle={{paddingBottom: 40}}
+        showsVerticalScrollIndicator={false}>
+        {/* Top Icons */}
+        <View style={styles.container}>
+          <View style={styles.TopIconsContainer}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Ionicons name="arrow-back" size={24} color="white" />
             </TouchableOpacity>
-            <TouchableOpacity>
-              <MaterialIcons name="star-border" size={24} color="white" />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Ionicons name="settings" size={24} color="white" />
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        {/* Image Header */}
-        <View style={styles.header}>
-          <View style={styles.avatarContainer}>
-            <Image
-              source={{
-                uri:
-                  profileImage ||
-                  'https://cdn-icons-png.flaticon.com/512/706/706830.png',
-              }}
-              style={[styles.avatar, {borderRadius: imageSize / 2}]}
-            />
-
-            {/* Camera icon overlay */}
-            <TouchableOpacity
-              style={styles.cameraIconButton}
-              onPress={() =>
-                navigation.navigate('Camera', {
-                  onCapture: handleImageCapture,
-                })
-              }>
-              <Feather name="camera" size={24} color="#fff" />
-            </TouchableOpacity>
+            <View style={styles.subTopIconsContainer}>
+              <TouchableOpacity>
+                <Feather name="edit-3" size={20} color="#fff" />
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <MaterialIcons name="star-border" size={24} color="white" />
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <Ionicons name="settings" size={24} color="white" />
+              </TouchableOpacity>
+            </View>
           </View>
 
-          <View style={styles.nameContainer}>
-            <Text style={styles.name}>{contact.displayName || 'Unnamed'}</Text>
-            <Text style={styles.username}>
-              {contact.phoneNumbers?.length > 0
-                ? contact.phoneNumbers[0].number
-                : 'No Number'}
+          {/* Image Header */}
+          <View style={styles.header}>
+            <View style={styles.avatarContainer}>
+              <Image
+                source={{
+                  uri:
+                    profileImage ||
+                    'https://cdn-icons-png.flaticon.com/512/706/706830.png',
+                }}
+                style={[styles.avatar, {borderRadius: imageSize / 2}]}
+              />
+
+              {/* Camera icon overlay */}
+              <TouchableOpacity
+                style={styles.cameraIconButton}
+                onPress={() =>
+                  navigation.navigate('Camera', {
+                    onCapture: handleImageCapture,
+                  })
+                }>
+                <Feather name="camera" size={24} color="#fff" />
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.nameContainer}>
+              <Text style={styles.name}>
+                {contact.displayName || 'Unnamed'}
+              </Text>
+              <Text style={styles.username}>
+                {contact.phoneNumbers?.length > 0
+                  ? contact.phoneNumbers[0].number
+                  : 'No Number'}
+              </Text>
+            </View>
+          </View>
+
+          {/* Call Section */}
+
+          <View style={styles.callSection}>
+            <TouchableOpacity style={styles.callSectionIcon}>
+              <Ionicons name="call-outline" size={22} color="#fff" />
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Feather name="message-circle" size={22} color="#fff" />
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <MaterialIcons name="videocam" size={22} color="#fff" />
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Feather name="map-pin" size={22} color="#fff" />
+            </TouchableOpacity>
+          </View>
+
+          {/* Cards */}
+          <View style={styles.card}>
+            <Text style={styles.title}>Contact info</Text>
+            <View style={styles.rowBetween}>
+              <View
+                style={{flexDirection: 'row', alignItems: 'center', gap: 20}}>
+                <Ionicons name="call-outline" size={22} color="#fff" />
+                <View>
+                  <Text style={styles.phone}>
+                    {' '}
+                    {contact.phoneNumbers?.length > 0
+                      ? contact.phoneNumbers[0].number
+                      : 'No Number'}
+                  </Text>
+                  <Text style={styles.label}>Mobile</Text>
+                </View>
+              </View>
+              <View style={styles.iconRow}>
+                <TouchableOpacity>
+                  <Icon name="videocam-outline" size={20} color="#fff" />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.iconSpace}>
+                  <Icon
+                    name="chatbubble-ellipses-outline"
+                    size={20}
+                    color="#fff"
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+
+          {/* Recent Activity */}
+          <View style={styles.card}>
+            <Text style={styles.title}>Recent activity</Text>
+            <Text style={styles.subText}>
+              To view calls and messages from your contacts,{' '}
+              <Text style={styles.link} onPress={() => Linking.openURL('#')}>
+                allow this app to access that info
+              </Text>
             </Text>
           </View>
-        </View>
 
-        {/* Call Section */}
+          {/* Connected Apps */}
+          <View style={styles.card}>
+            <Text style={styles.title}>Connected apps</Text>
+            <View
+              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              <View style={styles.row}>
+                <FontAwesome name="whatsapp" size={24} color="#25D366" />
+                <Text style={styles.whatsappText}>WhatsApp</Text>
+              </View>
+              <Entypo name="chevron-small-down" size={24} color="#fff" />
+            </View>
+          </View>
 
-        <View style={styles.callSection}>
-          <TouchableOpacity style={styles.callSectionIcon}>
-            <Ionicons name="call-outline" size={22} color="#fff" />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Feather name="message-circle" size={22} color="#fff" />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <MaterialIcons name="videocam" size={22} color="#fff" />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Feather name="map-pin" size={22} color="#fff" />
-          </TouchableOpacity>
+          <ContactSettings />
+
+          {/* End Main Container */}
         </View>
-      </View>
-      {/* End Main Container */}
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -236,6 +306,60 @@ const styles = StyleSheet.create({
     padding: 6,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  card: {
+    backgroundColor: '#181C1F',
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 16,
+    marginTop: 20,
+    marginHorizontal: 20,
+  },
+  title: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '400',
+    marginBottom: 30,
+  },
+  phone: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  label: {
+    color: '#aaa',
+    fontSize: 13,
+    marginTop: 2,
+    marginLeft: 10,
+  },
+  subText: {
+    color: '#ccc',
+    fontSize: 13,
+    lineHeight: 18,
+  },
+  link: {
+    color: '#4d9be8',
+  },
+  iconRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  iconSpace: {
+    marginLeft: 16,
+  },
+  rowBetween: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  whatsappText: {
+    color: '#fff',
+    fontSize: 15,
+    marginLeft: 20,
   },
 });
 
