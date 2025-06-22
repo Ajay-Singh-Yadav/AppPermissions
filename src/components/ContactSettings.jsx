@@ -119,6 +119,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
     marginBottom: 20,
+    marginLeft: 20,
   },
   row: {
     paddingHorizontal: 16,

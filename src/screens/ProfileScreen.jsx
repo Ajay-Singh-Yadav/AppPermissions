@@ -145,11 +145,6 @@ const ProfileScreen = () => {
               <Text style={styles.name}>
                 {contact.displayName || 'Unnamed'}
               </Text>
-              <Text style={styles.username}>
-                {contact.phoneNumbers?.length > 0
-                  ? contact.phoneNumbers[0].number
-                  : 'No Number'}
-              </Text>
             </View>
           </View>
 
