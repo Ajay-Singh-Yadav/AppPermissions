@@ -28,6 +28,15 @@ const ContactSettings = () => {
         <Text style={styles.title}>Reminders</Text>
       </TouchableOpacity>
 
+      <View
+        style={{
+          height: 0.5,
+          backgroundColor: 'rgba(255, 255, 255, 0.2)',
+          marginVertical: 8,
+          width: '100%',
+        }}
+      />
+
       {/* Share Contact */}
       <TouchableOpacity style={styles.row}>
         <Feather name="share-2" size={24} color="#fff" style={styles.icon} />
@@ -75,6 +84,15 @@ const ContactSettings = () => {
         <Text style={[styles.title, {color: '#ff6b6b'}]}>Delete</Text>
       </TouchableOpacity>
 
+      <View
+        style={{
+          height: 0.5,
+          backgroundColor: 'rgba(255, 255, 255, 0.2)',
+          marginVertical: 8,
+          width: '100%',
+        }}
+      />
+
       {/* Linked contact info */}
       <View style={styles.linkedContainer}>
         <Ionicons name="link" size={16} color="#0f0" />
@@ -90,12 +108,11 @@ export default ContactSettings;
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
     borderRadius: 12,
     marginTop: 16,
-    marginBottom: 32,
-    marginHorizontal: 12,
-    backgroundColor: 'transparent',
+    marginBottom: 5,
+    width: '100%',
+    backgroundColor: '#0F1417',
   },
   header: {
     color: '#fff',
@@ -104,10 +121,12 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   row: {
+    paddingHorizontal: 16,
+    marginLeft: 5,
+    width: '100%',
     flexDirection: 'row',
     alignItems: 'flex-start',
     paddingVertical: 12,
-    borderBottomWidth: 0.5,
     borderBottomColor: '#333',
   },
   icon: {

@@ -226,6 +226,14 @@ const ProfileScreen = () => {
             </View>
           </View>
 
+          <View
+            style={{
+              height: 0.5,
+              backgroundColor: 'rgba(255, 255, 255, 0.2)',
+              marginVertical: 8,
+            }}
+          />
+
           <ContactSettings />
 
           {/* End Main Container */}

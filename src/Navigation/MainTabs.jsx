@@ -6,9 +6,9 @@ import ContactsScreen from '../screens/ContactsScreen';
 import HighlightsScreen from '../screens/HighlightsScreen';
 import OrganiseScreen from '../screens/OrganiseScreen';
 
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import Fontisto from 'react-native-vector-icons/Fontisto';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Feather from 'react-native-vector-icons/Feather';
 
 const Tab = createBottomTabNavigator();
 
@@ -17,20 +17,44 @@ const MainTabs = () => {
     <Tab.Navigator
       screenOptions={({route}) => ({
         headerShown: false,
-        tabBarActiveTintColor: 'gray',
-        tabBarInactiveTintColor: 'white', // Inactive icon + label color
+        tabBarActiveTintColor: 'white',
+        tabBarInactiveTintColor: 'gray',
+        tabBarLabelStyle: {fontSize: 12, marginTop: 10},
         tabBarStyle: {
+          position: 'absolute',
           backgroundColor: '#1C2024',
           height: 80,
+          borderTopWidth: 0,
+          elevation: 5,
+          shadowOpacity: 0,
         },
         tabBarIcon: ({focused, color, size}) => {
           if (route.name === 'Contacts') {
-            return <FontAwesome name="user" size={size} color={color} />;
+            return (
+              <Ionicons
+                name="person"
+                size={20}
+                color={color}
+                style={{marginTop: 10}}
+              />
+            );
           } else if (route.name === 'Highlights') {
-            return <AntDesign name="star" size={size} color={color} />;
+            return (
+              <MaterialIcons
+                name="star-border"
+                size={22}
+                color={color}
+                style={{marginTop: 10}}
+              />
+            );
           } else if (route.name === 'Organise') {
             return (
-              <Fontisto name="nav-icon-list-a" size={size} color={color} />
+              <Feather
+                name="bookmark"
+                size={20}
+                color={color}
+                style={{marginTop: 10}}
+              />
             );
           }
         },
