@@ -58,7 +58,7 @@ const OrganiseScreen = () => {
 
         await RNFS.copyFile(file.uri, destPath);
 
-        navigation.navigate('PdfViewer', {localPath: destPath});
+        navigation.navigate('PDFViewer', {localPath: destPath});
       }
     } catch (err) {
       console.error('Error:', err);

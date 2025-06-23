@@ -13,21 +13,28 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {documentTypes} from '../utils/documentTypes';
 import {pick, types} from '@react-native-documents/picker';
 
+import RNFS from 'react-native-fs';
+
 import Header from '../components/Header';
 import DocumentReader from '../components/DocumentReader';
+import {useNavigation} from '@react-navigation/native';
 
 const DocumentViewerScreen = () => {
-  const handleFilePick = async () => {
+  const navigation = useNavigation();
+
+  const handleFilePick = async typeLabel => {
     try {
       const [file] = await pick({
-        type: [types.allFiles],
+        type: typeLabel === 'PDF' ? [types.pdf] : [types.allFiles],
       });
       if (file) {
+        const destPath = `${RNFS.DocumentDirectoryPath}/${file.name}`;
+
+        await RNFS.copyFile(file.uri, destPath);
+
+        navigation.navigate('PDFViewer', {localPath: destPath});
+
         console.log('Picked file', file);
-        Alert.alert(
-          'File Picked',
-          `Name: ${file.name}\nSize: ${file.size ?? 'Unknown'}`,
-        );
       }
     } catch (error) {
       if (err && err.code === 'DOCUMENT_PICKER_CANCELED') {
@@ -73,7 +80,7 @@ const DocumentViewerScreen = () => {
             <TouchableOpacity
               key={index}
               style={styles.gridItem}
-              onPress={handleFilePick}>
+              onPress={() => handleFilePick(doc.label)}>
               <Icon name={doc.icon} size={30} color={doc.color} />
               <Text style={styles.docLabel}>
                 {doc.label}({doc.count})
