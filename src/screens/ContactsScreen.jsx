@@ -134,9 +134,9 @@ const ContactsScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar
+        backgroundColor={'transparent'}
+        barStyle={'light-content'}
         translucent
-        backgroundColor="transparent"
-        barStyle="light-content"
       />
       <FlatList
         ListHeaderComponent={

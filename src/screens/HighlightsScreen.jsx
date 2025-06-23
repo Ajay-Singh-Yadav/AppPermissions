@@ -2,165 +2,222 @@ import React from 'react';
 import {
   View,
   Text,
+  TextInput,
+  FlatList,
+  Image,
   StyleSheet,
-  TouchableOpacity,
   ScrollView,
+  TouchableOpacity,
   StatusBar,
-  Alert,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {documentTypes} from '../utils/documentTypes';
-import {pick, types} from '@react-native-documents/picker';
+import Icon from 'react-native-vector-icons/Feather';
+import Feather from 'react-native-vector-icons/Feather';
+const favourites = [
+  {id: '1', name: 'Abhishek Techies', initial: 'A', color: '#4dd0e1'},
+  {id: '2', name: 'Adroit Abishek IT', initial: 'A', color: '#ff9800'},
+  {id: '3', name: 'Agami 2', initial: 'A', color: '#4dd0e1'},
+  {id: '4', name: 'Akash mosi', initial: 'A', color: '#4dd0e1'},
+];
 
-import RNFS from 'react-native-fs';
+const recents = [
+  {
+    id: '1',
+    name: 'Abhishek Techies',
+    initial: 'A',
+    time: 'Today',
+    color: '#4dd0e1',
+  },
+  {
+    id: '2',
+    name: 'Abhishek Techies',
+    initial: 'A',
+    time: 'Today',
+    color: '#4dd0e1',
+  },
+  {
+    id: '3',
+    name: 'Adroit Abishek IT',
+    initial: 'A',
+    time: 'Yesterday',
+    color: '#ff9800',
+  },
+  {
+    id: '4',
+    name: 'Arpit 🙌 Sir',
+    initial: 'A',
+    time: 'Yesterday',
+    color: '#81c784',
+  },
+  {
+    id: '5',
+    name: 'Bakeel Bareilly',
+    initial: 'B',
+    time: 'Yesterday',
+    color: '#66bb6a',
+  },
+];
 
-import Header from '../components/Header';
-import DocumentReader from '../components/DocumentReader';
-import {useNavigation} from '@react-navigation/native';
-
-const DocumentViewerScreen = () => {
-  const navigation = useNavigation();
-
-  const handleFilePick = async typeLabel => {
-    try {
-      const [file] = await pick({
-        type: typeLabel === 'PDF' ? [types.pdf] : [types.allFiles],
-      });
-      if (file) {
-        const destPath = `${RNFS.DocumentDirectoryPath}/${file.name}`;
-
-        await RNFS.copyFile(file.uri, destPath);
-
-        navigation.navigate('PDFViewer', {localPath: destPath});
-
-        console.log('Picked file', file);
-      }
-    } catch (error) {
-      if (err && err.code === 'DOCUMENT_PICKER_CANCELED') {
-        Alert.alert('Cancelled', 'File picking cancelled');
-      } else {
-        console.error('DocumentPicker Error:', err);
-        Alert.alert('Error', 'Something went wrong while picking a file');
-      }
-    }
-  };
-
+const ContactsScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar
-        barStyle={'dark-content'}
         backgroundColor={'transparent'}
+        barStyle={'light-content'}
         translucent
       />
-      <ScrollView>
-        <Header />
-
-        {/* Cloud Storage */}
-        <View style={styles.cloudContainer}>
-          <Text style={styles.cloudTitle}>Online Cloud Storage</Text>
-          <Text style={styles.cloudSubTitle}>Upgrade Now.</Text>
-          <View style={styles.cloudButtons}>
-            <TouchableOpacity style={styles.cloudBtn}>
-              <Text style={styles.cloudBtnText}>Cloud Upload</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.cloudBtn}>
-              <Text style={styles.cloudBtnText}>View Details</Text>
-            </TouchableOpacity>
-          </View>
+      <View style={styles.searchContainer}>
+        <View style={styles.searchAndIcon}>
+          <Feather
+            name="search"
+            size={20}
+            color="#fff"
+            style={styles.leftIcon}
+          />
+          <TextInput
+            placeholder="Search contacts"
+            placeholderTextColor="#ccc"
+            style={styles.searchInput}
+          />
         </View>
+        <Image
+          source={require('../assets/images/userIcon.png')}
+          style={styles.userIcon}
+        />
+      </View>
 
-        {/* Document Reader */}
-        <Text style={styles.sectionTitle}>Document Reader</Text>
-
-        {/* <DocumentReader />  */}
-
-        <View style={styles.grid}>
-          {documentTypes.map((doc, index) => (
-            <TouchableOpacity
-              key={index}
-              style={styles.gridItem}
-              onPress={() => handleFilePick(doc.label)}>
-              <Icon name={doc.icon} size={30} color={doc.color} />
-              <Text style={styles.docLabel}>
-                {doc.label}({doc.count})
-              </Text>
-              <Text style={styles.docSize}>{doc.size}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-
-        {/* Document Tools */}
-
-        <Text style={styles.sectionTitle}>Document Tools</Text>
-        <View style={{marginVertical: 20}}>
-          <DocumentReader />
-        </View>
+      <Text style={styles.title}>Favourites</Text>
+      <ScrollView
+        style={styles.scrollContainer}
+        horizontal
+        showsHorizontalScrollIndicator={false}>
+        {favourites.map(item => (
+          <TouchableOpacity key={item.id} style={styles.avatarContainer}>
+            <View style={[styles.avatar, {backgroundColor: item.color}]}>
+              <Text style={styles.avatarText}>{item.initial}</Text>
+            </View>
+            <Text style={styles.avatarName}>{item.name}</Text>
+          </TouchableOpacity>
+        ))}
       </ScrollView>
+
+      <Text style={styles.title}>Recents</Text>
+      <View
+        style={{
+          backgroundColor: '#181C1F',
+          padding: 15,
+          marginTop: 10,
+          borderRadius: 20,
+        }}>
+        {recents.map(item => (
+          <TouchableOpacity style={styles.recentItem}>
+            <View style={[styles.recentIcon, {backgroundColor: item.color}]}>
+              <Text style={styles.recentText}>{item.initial}</Text>
+            </View>
+            <View>
+              <Text style={styles.name}>{item.name}</Text>
+              <Text style={styles.time}>{item.time}</Text>
+            </View>
+          </TouchableOpacity>
+        ))}
+      </View>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: '#fff'},
-  cloudContainer: {
-    backgroundColor: '#d8b4fe',
-    margin: 12,
+  container: {
     padding: 16,
-    borderRadius: 12,
+    flex: 1,
+    backgroundColor: '#0F1417',
   },
-  cloudTitle: {fontSize: 18, fontWeight: 'bold', color: '#1e1e1e'},
-  cloudSubTitle: {fontSize: 14, marginTop: 4, color: '#555'},
-  cloudButtons: {
+  searchContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 12,
+    alignItems: 'center',
+    backgroundColor: '#1e1e1e',
+    borderRadius: 30,
+    paddingHorizontal: 16,
+    marginBottom: 16,
   },
-  cloudBtn: {
-    backgroundColor: '#f1f5f9',
-    paddingVertical: 8,
-    paddingHorizontal: 14,
-    borderRadius: 8,
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: 10,
+    marginTop: 16,
+    borderRadius: 30,
+    paddingHorizontal: 10,
+    backgroundColor: '#1B272F',
   },
-  cloudBtnText: {fontWeight: '500', color: '#000'},
-  sectionTitle: {
-    marginTop: 20,
+  title: {
+    color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
-    marginHorizontal: 12,
+    marginBottom: 8,
     marginTop: 16,
-    color: '#111827',
   },
-  grid: {
+  searchAndIcon: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    margin: 12,
-    justifyContent: 'space-between',
+    alignItems: 'center',
+    flex: 1,
+    backgroundColor: '#1B272F',
+    borderRadius: 25,
+    paddingHorizontal: 12,
+    height: 45,
   },
-  gridItem: {
-    width: '30%',
-    marginVertical: 10,
+  leftIcon: {
+    marginRight: 8,
+  },
+  searchInput: {
+    flex: 1,
+    color: '#fff',
+    fontSize: 16,
+  },
+  userIcon: {
+    width: 35,
+    height: 35,
+    marginLeft: 10,
+    borderRadius: 20,
+
+    borderColor: '#fff',
+  },
+  avatarContainer: {
+    borderColor: '#333',
+    borderRadius: 60,
+    padding: 8,
+    marginRight: 16,
     alignItems: 'center',
   },
-  docLabel: {marginTop: 4, fontSize: 12, color: '#111'},
-  docSize: {fontSize: 11, color: '#555'},
-  toolGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    margin: 12,
-    justifyContent: 'space-between',
+  scrollContainer: {
+    maxHeight: 130, // instead of fixed 80
+    marginBottom: 10,
   },
-  toolItem: {
-    width: '30%',
-    marginVertical: 12,
+  avatar: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    justifyContent: 'center',
     alignItems: 'center',
   },
-  toolLabel: {
-    marginTop: 4,
-    fontSize: 12,
-    textAlign: 'center',
-    color: '#111827',
+
+  avatarText: {color: '#000', fontSize: 20, fontWeight: 'bold'},
+  avatarName: {color: '#fff', marginTop: 4, fontSize: 12, textAlign: 'center'},
+  recentItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+    gap: 12,
   },
+  recentIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  recentText: {color: '#000', fontWeight: 'bold'},
+  name: {color: '#fff', fontSize: 16},
+  time: {color: '#aaa', fontSize: 12},
 });
 
-export default DocumentViewerScreen;
+export default ContactsScreen;

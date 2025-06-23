@@ -10,6 +10,7 @@ import {
   Alert,
   Button,
   ScrollView,
+  StatusBar,
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -95,6 +96,11 @@ const ProfileScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar
+        backgroundColor={'transparent'}
+        barStyle={'light-content'}
+        translucent
+      />
       <ScrollView
         contentContainerStyle={{paddingBottom: 40}}
         showsVerticalScrollIndicator={false}>
@@ -151,18 +157,26 @@ const ProfileScreen = () => {
           {/* Call Section */}
 
           <View style={styles.callSection}>
-            <TouchableOpacity style={styles.callSectionIcon}>
-              <Ionicons name="call-outline" size={22} color="#fff" />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Feather name="message-circle" size={22} color="#fff" />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <MaterialIcons name="videocam" size={22} color="#fff" />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Feather name="map-pin" size={22} color="#fff" />
-            </TouchableOpacity>
+            <View style={styles.callIconContainer}>
+              <TouchableOpacity style={styles.callSectionIcon}>
+                <Ionicons name="call-outline" size={22} color="#fff" />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.callIconContainer}>
+              <TouchableOpacity>
+                <Feather name="message-circle" size={22} color="#fff" />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.callIconContainer}>
+              <TouchableOpacity>
+                <MaterialIcons name="videocam" size={22} color="#fff" />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.callIconContainer}>
+              <TouchableOpacity>
+                <Feather name="map-pin" size={22} color="#fff" />
+              </TouchableOpacity>
+            </View>
           </View>
 
           {/* Cards */}
@@ -280,6 +294,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
+  },
+  callIconContainer: {
+    backgroundColor: '#374955',
+    borderRadius: 50,
+    height: 50,
+    width: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   callSectionIcon: {
     borderRadius: 30,
