@@ -5,6 +5,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import MainTabs from './src/Navigation/MainTabs';
 import ProfileScreen from './src/screens/ProfileScreen';
 import CameraScreen from './src/screens/CameraScreen';
+import PdfViewer from './src/screens/PdfViewer';
 
 const Stack = createNativeStackNavigator();
 const App = () => {
@@ -14,6 +15,7 @@ const App = () => {
         <Stack.Screen name="MainTab" component={MainTabs} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="Camera" component={CameraScreen} />
+        <Stack.Screen name="PDFViewer" component={PdfViewer} />
       </Stack.Navigator>
     </NavigationContainer>
   );
