@@ -1,32 +1,25 @@
 import React from 'react';
-import {StyleSheet, View, Dimensions} from 'react-native';
-import Pdf from 'react-native-pdf';
+import {StyleSheet, View, Platform} from 'react-native';
+import {WebView} from 'react-native-webview';
 
 const PdfViewer = ({route}) => {
-  const {uri} = route.params;
+  const {localPath} = route.params;
+
+  const uri = Platform.OS === 'android' ? `file://${localPath}` : localPath;
 
   return (
-    <View style={styles.container}>
-      <Pdf
-        source={{uri}}
-        style={styles.pdf}
-        onError={error => {
-          console.log('PDF loading error:', error);
+    <View style={{flex: 1}}>
+      <WebView
+        originWhitelist={['*']}
+        source={{
+          uri: `https://drive.google.com/viewerng/viewer?embedded=true&url=${encodeURIComponent(
+            uri,
+          )}`,
         }}
+        startInLoadingState
       />
     </View>
   );
 };
 
 export default PdfViewer;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  pdf: {
-    flex: 1,
-    width: Dimensions.get('window').width,
-  },
-});
