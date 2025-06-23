@@ -38,6 +38,10 @@ const ProfileScreen = () => {
   const [location, setLocation] = useState(null);
   const [profileImage, setProfileImage] = useState(null);
 
+  const handleLocationPress = () => {
+    navigation.navigate('Location');
+  };
+
   // Location Permission
   const requestLocationPermission = async () => {
     try {
@@ -173,7 +177,7 @@ const ProfileScreen = () => {
               </TouchableOpacity>
             </View>
             <View style={styles.callIconContainer}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={handleLocationPress}>
                 <Feather name="map-pin" size={22} color="#fff" />
               </TouchableOpacity>
             </View>
