@@ -19,8 +19,10 @@ import {pick, types} from '@react-native-documents/picker';
 
 const CameraScreen = () => {
   const route = useRoute();
+
   const navigation = useNavigation();
   const cameraRef = useRef(null);
+
   const [hasPermission, setHasPermission] = useState(false);
   const [cameraActive, setCameraActive] = useState(false);
   const [cameraType, setCameraType] = useState('back');
@@ -96,17 +98,17 @@ const CameraScreen = () => {
   const pickImageFromGallery = async () => {
     try {
       const [file] = await pick({
-        type: [types.images], // images only
+        type: [types.images],
       });
 
       if (file) {
         const selectedImageUri = file.uri;
 
         if (route.params?.onCapture) {
-          route.params.onCapture(selectedImageUri); // ✅ set profile image
+          route.params.onCapture(selectedImageUri);
         }
 
-        navigation.goBack(); // ✅ return to profile screen
+        navigation.goBack();
       }
     } catch (err) {
       if (err.code !== 'DOCUMENT_PICKER_CANCELED') {

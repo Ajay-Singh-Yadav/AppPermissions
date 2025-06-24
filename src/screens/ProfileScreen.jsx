@@ -29,6 +29,8 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ContactSettings from '../components/ContactSettings';
 
+import LocationSharingModal from '../components/LocationSharingModal';
+
 const ProfileScreen = () => {
   const imageSize = 200;
   const navigation = useNavigation();
@@ -37,29 +39,32 @@ const ProfileScreen = () => {
 
   const [location, setLocation] = useState(null);
   const [profileImage, setProfileImage] = useState(null);
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
+  const [showLocationModal, setShowLocationModal] = useState(false);
 
   const handleLocationPress = () => {
     navigation.navigate('Location');
   };
 
-  // Location Permission
-  const requestLocationPermission = async () => {
-    try {
-      const result = await request(
-        Platform.OS === 'android'
-          ? PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION
-          : PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
-      );
-      return result === RESULTS.GRANTED;
-    } catch (err) {
-      console.warn(err);
-      return false;
-    }
-  };
-
   const handleImageCapture = async uri => {
     setProfileImage(uri);
     await AsyncStorage.setItem(`profileImage_${contact.recordID}`, uri);
+  };
+
+  const requestLocationPermission = async () => {
+    if (Platform.OS === 'android') {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        {
+          title: 'Location Permission',
+          message: 'This app needs access to your location.',
+          buttonPositive: 'OK',
+        },
+      );
+      return granted === PermissionsAndroid.RESULTS.GRANTED;
+    }
+    return true;
   };
 
   useEffect(() => {
@@ -83,8 +88,13 @@ const ProfileScreen = () => {
 
     Geolocation.getCurrentPosition(
       position => {
-        console.log(position);
-        setLocation(position);
+        setLatitude(position.coords.latitude);
+        setLongitude(position.coords.longitude);
+        setShowLocationModal(true);
+        Alert.alert(
+          'Location',
+          `Latitude: ${position.coords.latitude}, Longitude: ${position.coords.longitude}`,
+        );
       },
       error => {
         console.warn(error.code, error.message);
@@ -161,25 +171,54 @@ const ProfileScreen = () => {
           {/* Call Section */}
 
           <View style={styles.callSection}>
-            <View style={styles.callIconContainer}>
-              <TouchableOpacity style={styles.callSectionIcon}>
-                <Ionicons name="call-outline" size={22} color="#fff" />
-              </TouchableOpacity>
+            <View style={{justifyContent: 'center', alignItems: 'center'}}>
+              <View style={styles.callIconContainer}>
+                <TouchableOpacity style={styles.callSectionIcon}>
+                  <Ionicons name="call-outline" size={22} color="#fff" />
+                </TouchableOpacity>
+              </View>
+              <Text style={{alignSelf: 'center', color: '#fff', fontSize: 12}}>
+                Call
+              </Text>
             </View>
-            <View style={styles.callIconContainer}>
-              <TouchableOpacity>
-                <Feather name="message-circle" size={22} color="#fff" />
-              </TouchableOpacity>
+
+            <View style={{justifyContent: 'center', alignItems: 'center'}}>
+              <View style={styles.callIconContainer}>
+                <TouchableOpacity>
+                  <Feather name="message-circle" size={22} color="#fff" />
+                </TouchableOpacity>
+              </View>
+              <Text style={{alignSelf: 'center', color: '#fff', fontSize: 12}}>
+                Message
+              </Text>
             </View>
-            <View style={styles.callIconContainer}>
-              <TouchableOpacity>
-                <MaterialIcons name="videocam" size={22} color="#fff" />
-              </TouchableOpacity>
+
+            <View style={{justifyContent: 'center', alignItems: 'center'}}>
+              <View style={styles.callIconContainer}>
+                <TouchableOpacity>
+                  <MaterialIcons name="videocam" size={22} color="#fff" />
+                </TouchableOpacity>
+              </View>
+              <Text style={{alignSelf: 'center', color: '#fff', fontSize: 12}}>
+                Video
+              </Text>
             </View>
-            <View style={styles.callIconContainer}>
-              <TouchableOpacity onPress={handleLocationPress}>
-                <Feather name="map-pin" size={22} color="#fff" />
-              </TouchableOpacity>
+
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginTop: 15,
+              }}>
+              <View style={styles.callIconContainer}>
+                <TouchableOpacity onPress={getLocation}>
+                  <Feather name="map-pin" size={22} color="#fff" />
+                </TouchableOpacity>
+              </View>
+              <Text style={{alignSelf: 'center', color: '#fff', fontSize: 12}}>
+                {'  '}
+                share{'\n'}Location
+              </Text>
             </View>
           </View>
 
@@ -306,6 +345,7 @@ const styles = StyleSheet.create({
     width: 50,
     alignItems: 'center',
     justifyContent: 'center',
+    marginBottom: 5,
   },
   callSectionIcon: {
     borderRadius: 30,
