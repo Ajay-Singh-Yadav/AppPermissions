@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Modal,
   View,
@@ -14,6 +14,9 @@ const LocationSharingModal = ({
   contact,
   latitude,
   longitude,
+  city,
+  region,
+  fullAddress,
 }) => {
   return (
     <Modal visible={visible} transparent animationType="fade">
@@ -43,7 +46,11 @@ const LocationSharingModal = ({
             </View>
           </View>
 
-          <Text style={styles.city}>Location: Amritsar </Text>
+          <Text style={styles.city}>Location: {city || 'N/A'}</Text>
+          <Text style={styles.addressText}>
+            {fullAddress || 'Fetching address...'}
+          </Text>
+          <Text style={styles.region}>Region: {region || 'N/A'}</Text>
           <Text style={styles.coords}>Latitude: {latitude}</Text>
           <Text style={styles.coords}>Longitude: {longitude}</Text>
 
@@ -120,6 +127,10 @@ const styles = StyleSheet.create({
   city: {
     fontSize: 15,
     marginTop: 10,
+    color: '#000',
+  },
+  region: {
+    fontSize: 15,
     color: '#000',
   },
   coords: {

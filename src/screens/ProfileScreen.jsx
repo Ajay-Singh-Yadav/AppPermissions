@@ -20,6 +20,9 @@ import {request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
+import Geocoder from 'react-native-geocoding';
+Geocoder.init('AIzaSyD3FbslZFCti8Gub5tSiw2WnqSvkRR2Jq8');
+
 //Icons
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -42,10 +45,10 @@ const ProfileScreen = () => {
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
   const [showLocationModal, setShowLocationModal] = useState(false);
+  const [city, setCity] = useState('');
+  const [region, setRegion] = useState('');
 
-  const handleLocationPress = () => {
-    navigation.navigate('Location');
-  };
+  const [fullAddress, setFullAddress] = useState('');
 
   const handleImageCapture = async uri => {
     setProfileImage(uri);
@@ -79,6 +82,31 @@ const ProfileScreen = () => {
     loadProfileImage();
   }, [contact.recordID]);
 
+  // const getLocation = async () => {
+  //   const hasPermission = await requestLocationPermission();
+  //   if (!hasPermission) {
+  //     Alert.alert('Permission Denied', 'Location permission is required.');
+  //     return;
+  //   }
+
+  //   Geolocation.getCurrentPosition(
+  //     position => {
+  //       setLatitude(position.coords.latitude);
+  //       setLongitude(position.coords.longitude);
+  //       setShowLocationModal(true);
+  //     },
+  //     error => {
+  //       console.warn(error.code, error.message);
+  //       Alert.alert('Error', error.message);
+  //     },
+  //     {
+  //       enableHighAccuracy: true,
+  //       timeout: 15000,
+  //       maximumAge: 10000,
+  //     },
+  //   );
+  // };
+
   const getLocation = async () => {
     const hasPermission = await requestLocationPermission();
     if (!hasPermission) {
@@ -87,10 +115,35 @@ const ProfileScreen = () => {
     }
 
     Geolocation.getCurrentPosition(
-      position => {
-        setLatitude(position.coords.latitude);
-        setLongitude(position.coords.longitude);
-        setShowLocationModal(true);
+      async position => {
+        const {latitude, longitude} = position.coords;
+        setLatitude(latitude);
+        setLongitude(longitude);
+
+        try {
+          const geoResponse = await Geocoder.from(latitude, longitude);
+          const formatted = geoResponse.results[0].formatted_address;
+          setFullAddress(formatted);
+          const addressComponents = geoResponse.results[0].address_components;
+          let cityName = '';
+          let regionName = '';
+
+          addressComponents.forEach(component => {
+            if (component.types.includes('locality')) {
+              cityName = component.long_name;
+            }
+            if (component.types.includes('administrative_area_level_1')) {
+              regionName = component.long_name;
+            }
+          });
+
+          setCity(cityName);
+          setRegion(regionName);
+          setShowLocationModal(true);
+        } catch (error) {
+          console.error('Geocoding Error:', error);
+          Alert.alert('Geocoding Failed', 'Unable to fetch address.');
+        }
       },
       error => {
         console.warn(error.code, error.message);
@@ -295,6 +348,9 @@ const ProfileScreen = () => {
         contact={{...contact, profileImage}}
         latitude={latitude}
         longitude={longitude}
+        city={city}
+        region={region}
+        fullAddress={fullAddress}
       />
     </SafeAreaView>
   );
