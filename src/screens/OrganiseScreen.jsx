@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -18,31 +18,16 @@ import RNFS from 'react-native-fs';
 import Header from '../components/Header';
 import DocumentReader from '../components/DocumentReader';
 import {useNavigation} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const OrganiseScreen = () => {
   const navigation = useNavigation();
 
-  const handleFilePick = async typeLabel => {
-    try {
-      const [file] = await pick({
-        type: typeLabel === 'PDF' ? [types.pdf] : [types.allFiles],
-      });
-      if (file) {
-        const destPath = `${RNFS.DocumentDirectoryPath}/${file.name}`;
+  const [pickedPDF, setPickedPDF] = useState(null);
 
-        await RNFS.copyFile(file.uri, destPath);
-
-        navigation.navigate('PDFViewer', {localPath: destPath});
-
-        console.log('Picked file', file);
-      }
-    } catch (error) {
-      if (err && err.code === 'DOCUMENT_PICKER_CANCELED') {
-        Alert.alert('Cancelled', 'File picking cancelled');
-      } else {
-        console.error('DocumentPicker Error:', err);
-        Alert.alert('Error', 'Something went wrong while picking a file');
-      }
+  const DocumentsScreens = typeLabel => {
+    if (typeLabel === 'PDF') {
+      navigation.navigate('PDFViewer');
     }
   };
 
@@ -80,7 +65,7 @@ const OrganiseScreen = () => {
             <TouchableOpacity
               key={index}
               style={styles.gridItem}
-              onPress={() => handleFilePick(doc.label)}>
+              onPress={() => DocumentsScreens(doc.label)}>
               <Icon name={doc.icon} size={30} color={doc.color} />
               <Text style={styles.docLabel}>
                 {doc.label}({doc.count})
@@ -96,6 +81,40 @@ const OrganiseScreen = () => {
         <View style={{marginVertical: 20}}>
           <DocumentReader />
         </View>
+
+        <Text>Pdf's files</Text>
+
+        {/* {pickedPDF && (
+          <View
+            style={{
+              marginHorizontal: 12,
+              marginTop: -8,
+              padding: 10,
+              backgroundColor: '#f9fafb',
+              borderRadius: 8,
+              borderColor: '#d1d5db',
+              borderWidth: 1,
+            }}>
+            <Text style={{fontWeight: 'bold', marginBottom: 4}}>
+              📄 Selected DOC PDF:
+            </Text>
+            <Text style={{color: '#374151'}}>{pickedPDF.name}</Text>
+
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('PDFViewer', {localPath: pickedPDF.uri});
+              }}
+              style={{
+                marginTop: 6,
+                padding: 6,
+                backgroundColor: '#e0f2fe',
+                borderRadius: 6,
+                alignSelf: 'flex-start',
+              }}>
+              <Text style={{color: '#0369a1'}}>Open PDF</Text>
+            </TouchableOpacity>
+          </View>
+        )} */}
       </ScrollView>
     </SafeAreaView>
   );

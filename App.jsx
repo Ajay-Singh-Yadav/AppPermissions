@@ -7,6 +7,7 @@ import ProfileScreen from './src/screens/ProfileScreen';
 import CameraScreen from './src/screens/CameraScreen';
 import PdfViewer from './src/screens/PdfViewer';
 import LocationScreen from './src/screens/LocationScreen';
+import PDFReaderScreen from './src/screens/PDFReaderScreen';
 
 const Stack = createNativeStackNavigator();
 const App = () => {
@@ -18,6 +19,7 @@ const App = () => {
         <Stack.Screen name="Camera" component={CameraScreen} />
         <Stack.Screen name="PDFViewer" component={PdfViewer} />
         <Stack.Screen name="Location" component={LocationScreen} />
+        <Stack.Screen name="PDFReader" component={PDFReaderScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
