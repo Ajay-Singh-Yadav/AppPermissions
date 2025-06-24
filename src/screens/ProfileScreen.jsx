@@ -206,11 +206,13 @@ const ProfileScreen = () => {
                 alignItems: 'center',
                 marginTop: 15,
               }}>
-              <View style={styles.callIconContainer}>
-                <TouchableOpacity onPress={getLocation}>
-                  <Feather name="map-pin" size={22} color="#fff" />
-                </TouchableOpacity>
-              </View>
+              <TouchableOpacity
+                style={styles.callIconContainer}
+                onPress={getLocation}>
+                {/* <TouchableOpacity onPress={getLocation}> */}
+                <Feather name="map-pin" size={22} color="#fff" />
+                {/* </TouchableOpacity> */}
+              </TouchableOpacity>
               <Text style={{alignSelf: 'center', color: '#fff', fontSize: 12}}>
                 {'  '}
                 share{'\n'}Location
