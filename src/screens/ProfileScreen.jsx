@@ -91,10 +91,6 @@ const ProfileScreen = () => {
         setLatitude(position.coords.latitude);
         setLongitude(position.coords.longitude);
         setShowLocationModal(true);
-        Alert.alert(
-          'Location',
-          `Latitude: ${position.coords.latitude}, Longitude: ${position.coords.longitude}`,
-        );
       },
       error => {
         console.warn(error.code, error.message);
@@ -291,6 +287,13 @@ const ProfileScreen = () => {
           {/* End Main Container */}
         </View>
       </ScrollView>
+      <LocationSharingModal
+        visible={showLocationModal}
+        onClose={() => setShowLocationModal(false)}
+        contact={{...contact, profileImage}}
+        latitude={latitude}
+        longitude={longitude}
+      />
     </SafeAreaView>
   );
 };
