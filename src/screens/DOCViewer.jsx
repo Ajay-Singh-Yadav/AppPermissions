@@ -115,7 +115,7 @@ const PDFViewerScreen = () => {
       </View>
       {/* <Icon name="dots-vertical" size={20} color="#555" /> */}
       <TouchableOpacity onPress={() => handleDelete(index)}>
-        <Icon name="dots-vertical" size={20} color="#555" />
+        <Icon name="dots-vertical" size={20} color="#fff" />
       </TouchableOpacity>
     </TouchableOpacity>
   );
@@ -152,7 +152,7 @@ const PDFViewerScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: '#fff'},
+  container: {flex: 1, backgroundColor: '#0F1417'},
   header: {
     backgroundColor: '#2D7BDB',
     paddingTop: 60,
@@ -183,11 +183,11 @@ const styles = StyleSheet.create({
   filename: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#000',
+    color: '#fff',
   },
   meta: {
     fontSize: 13,
-    color: '#555',
+    color: '#fff',
     marginTop: 3,
   },
 });

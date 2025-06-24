@@ -44,11 +44,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  docLabel: {marginTop: 4, fontSize: 12, color: '#111'},
+  docLabel: {marginTop: 4, fontSize: 12, color: '#fff'},
   toolLabel: {
     fontSize: 12,
     textAlign: 'center',
-    color: '#111827',
+    color: '#fff',
   },
   docSize: {fontSize: 11, color: '#555'},
 });

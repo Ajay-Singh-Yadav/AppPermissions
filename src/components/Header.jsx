@@ -11,7 +11,7 @@ const Header = () => {
     <View style={styles.container}>
       {/* Hamburger Menu */}
       <TouchableOpacity>
-        <Feather name="menu" size={24} color="black" />
+        <Feather name="menu" size={24} color="white" />
       </TouchableOpacity>
 
       {/* Right Icons */}
@@ -38,7 +38,7 @@ export default Header;
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    backgroundColor: '#f0f2ff',
+
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 15,

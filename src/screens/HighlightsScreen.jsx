@@ -13,57 +13,15 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Feather';
 import Feather from 'react-native-vector-icons/Feather';
-const favourites = [
-  {id: '1', name: 'Abhishek Techies', initial: 'A', color: '#4dd0e1'},
-  {id: '2', name: 'Adroit Abishek IT', initial: 'A', color: '#ff9800'},
-  {id: '3', name: 'Agami 2', initial: 'A', color: '#4dd0e1'},
-  {id: '4', name: 'Akash mosi', initial: 'A', color: '#4dd0e1'},
-];
-
-const recents = [
-  {
-    id: '1',
-    name: 'Abhishek Techies',
-    initial: 'A',
-    time: 'Today',
-    color: '#4dd0e1',
-  },
-  {
-    id: '2',
-    name: 'Abhishek Techies',
-    initial: 'A',
-    time: 'Today',
-    color: '#4dd0e1',
-  },
-  {
-    id: '3',
-    name: 'Adroit Abishek IT',
-    initial: 'A',
-    time: 'Yesterday',
-    color: '#ff9800',
-  },
-  {
-    id: '4',
-    name: 'Arpit 🙌 Sir',
-    initial: 'A',
-    time: 'Yesterday',
-    color: '#81c784',
-  },
-  {
-    id: '5',
-    name: 'Bakeel Bareilly',
-    initial: 'B',
-    time: 'Yesterday',
-    color: '#66bb6a',
-  },
-];
+import {recents} from '../utils/documentTypes';
+import {favourites} from '../utils/documentTypes';
 
 const ContactsScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar
-        backgroundColor={'transparent'}
-        barStyle={'light-content'}
+        barStyle="light-content"
+        backgroundColor="transparent"
         translucent
       />
       <View style={styles.searchContainer}>

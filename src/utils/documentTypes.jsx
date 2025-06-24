@@ -70,3 +70,48 @@ export const documentTypes = [
     color: '#6b7280',
   },
 ];
+
+export const recents = [
+  {
+    id: '1',
+    name: 'Abhishek Techies',
+    initial: 'A',
+    time: 'Today',
+    color: '#4dd0e1',
+  },
+  {
+    id: '2',
+    name: 'Abhishek Techies',
+    initial: 'A',
+    time: 'Today',
+    color: '#4dd0e1',
+  },
+  {
+    id: '3',
+    name: 'Adroit Abishek IT',
+    initial: 'A',
+    time: 'Yesterday',
+    color: '#ff9800',
+  },
+  {
+    id: '4',
+    name: 'Arpit 🙌 Sir',
+    initial: 'A',
+    time: 'Yesterday',
+    color: '#81c784',
+  },
+  {
+    id: '5',
+    name: 'Bakeel Bareilly',
+    initial: 'B',
+    time: 'Yesterday',
+    color: '#66bb6a',
+  },
+];
+
+export const favourites = [
+  {id: '1', name: 'Abhishek Techies', initial: 'A', color: '#4dd0e1'},
+  {id: '2', name: 'Adroit Abishek IT', initial: 'A', color: '#ff9800'},
+  {id: '3', name: 'Agami 2', initial: 'A', color: '#4dd0e1'},
+  {id: '4', name: 'Akash mosi', initial: 'A', color: '#4dd0e1'},
+];

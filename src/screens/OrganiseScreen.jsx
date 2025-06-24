@@ -30,8 +30,8 @@ const OrganiseScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar
-        barStyle={'dark-content'}
-        backgroundColor={'transparent'}
+        barStyle="light-content"
+        backgroundColor="transparent"
         translucent
       />
       <ScrollView>
@@ -80,7 +80,7 @@ const OrganiseScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: '#fff'},
+  container: {flex: 1, backgroundColor: '#0F1417'},
   cloudContainer: {
     backgroundColor: '#d8b4fe',
     margin: 12,
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginHorizontal: 12,
     marginTop: 16,
-    color: '#111827',
+    color: '#fff',
   },
   grid: {
     flexDirection: 'row',
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     alignItems: 'center',
   },
-  docLabel: {marginTop: 4, fontSize: 12, color: '#111'},
+  docLabel: {marginTop: 4, fontSize: 12, color: '#fff'},
   docSize: {fontSize: 11, color: '#555'},
   toolGrid: {
     flexDirection: 'row',
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
     fontSize: 12,
     textAlign: 'center',
-    color: '#111827',
+    color: 'white',
   },
 });
 
