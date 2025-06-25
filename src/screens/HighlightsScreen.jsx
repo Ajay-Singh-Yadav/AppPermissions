@@ -11,7 +11,7 @@ import {
   StatusBar,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import Icon from 'react-native-vector-icons/Feather';
+
 import Feather from 'react-native-vector-icons/Feather';
 import {recents} from '../utils/documentTypes';
 import {favourites} from '../utils/documentTypes';
@@ -68,7 +68,7 @@ const ContactsScreen = () => {
           borderRadius: 20,
         }}>
         {recents.map(item => (
-          <TouchableOpacity style={styles.recentItem}>
+          <TouchableOpacity key={item.id} style={styles.recentItem}>
             <View style={[styles.recentIcon, {backgroundColor: item.color}]}>
               <Text style={styles.recentText}>{item.initial}</Text>
             </View>

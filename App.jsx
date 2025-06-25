@@ -9,12 +9,14 @@ import PdfViewer from './src/screens/PdfViewer';
 import LocationScreen from './src/screens/LocationScreen';
 import PDFReaderScreen from './src/screens/PDFReaderScreen';
 import DOCViewer from './src/screens/DOCViewer';
+import SplashScreen from './src/screens/SpalshScreen';
 
 const Stack = createNativeStackNavigator();
 const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}}>
+        <Stack.Screen name="Splash" component={SplashScreen} />
         <Stack.Screen name="MainTab" component={MainTabs} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="Camera" component={CameraScreen} />
