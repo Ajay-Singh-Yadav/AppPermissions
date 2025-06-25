@@ -14,69 +14,73 @@ import RNFS from 'react-native-fs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
 import Feather from 'react-native-vector-icons/Feather';
+import FileViewer from 'react-native-file-viewer';
+import Share from 'react-native-share';
 
-const PDFViewerScreen = () => {
-  const [pickedPDFs, setPickedPDFs] = useState([]);
-
+const DocsViewerScreen = () => {
   const navigation = useNavigation();
 
+  const [docs, setDocs] = useState([]);
+
   useEffect(() => {
-    const loadSavedPDFs = async () => {
+    const loadDocs = async () => {
       try {
-        const saved = await AsyncStorage.getItem('saved_doc_pdfs');
-        if (saved) {
-          setPickedPDFs(JSON.parse(saved));
-        }
+        const saved = await AsyncStorage.getItem('saved_doc_files');
+        if (saved) setDocs(JSON.parse(saved));
       } catch (err) {
-        console.error('Error loading saved PDFs:', err);
+        console.error('Error loading DOCs:', err);
       }
     };
-    loadSavedPDFs();
+    loadDocs();
   }, []);
 
+  const openDOC = async uri => {
+    try {
+      await Share.open({
+        url: 'file://' + uri,
+        type: 'application/msword',
+        showAppsToView: true,
+      });
+    } catch (error) {
+      if (error.message !== 'User did not share') {
+        Alert.alert('Error', 'No app found to open this document.');
+      }
+    }
+  };
   const handleFilePick = async () => {
     try {
       const [file] = await pick({
         type: [
-          // types.pdf
-
           'application/msword', // .doc
           'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
         ],
       });
 
-      if (file) {
-        const destPath = `${RNFS.DocumentDirectoryPath}/${file.name}`;
-        await RNFS.copyFile(file.uri, destPath);
+      if (!file) return;
 
-        const newPDF = {
-          name: file.name,
-          uri: destPath,
-          size: `${(file.size / 1024).toFixed(2)} KB`,
-          date: new Date().toLocaleDateString(),
-        };
+      const destPath = `${RNFS.DocumentDirectoryPath}/${file.name}`;
+      await RNFS.copyFile(file.uri, destPath);
 
-        const updatedPDFs = [newPDF, ...pickedPDFs];
-        setPickedPDFs(updatedPDFs);
-        await AsyncStorage.setItem(
-          'saved_doc_pdfs',
-          JSON.stringify(updatedPDFs),
-        );
-      }
+      const newDoc = {
+        name: file.name,
+        uri: destPath,
+        size: `${(file.size / 1024).toFixed(2)} KB`,
+        date: new Date().toLocaleDateString(),
+      };
+
+      const updated = [newDoc, ...docs];
+      setDocs(updated);
+      await AsyncStorage.setItem('saved_doc_files', JSON.stringify(updated));
     } catch (err) {
-      if (err?.code === 'DOCUMENT_PICKER_CANCELED') {
-        Alert.alert('Cancelled', 'File picking cancelled');
-      } else {
-        console.error('DocumentPicker Error:', err);
-        Alert.alert('Error', 'Something went wrong while picking a file');
-      }
+      if ((err?.message || '').toLowerCase().includes('canceled')) return;
+      Alert.alert('Error', 'Failed to pick DOC file');
     }
   };
 
   const handleDelete = index => {
     Alert.alert(
-      'Delete PDF',
-      'Are you sure you want to delete  this PDF',
+      'Delete Document',
+      'Are you sure you want to delete  this Document',
       [
         {text: 'Cancel', style: 'cancel'},
         {
@@ -84,16 +88,16 @@ const PDFViewerScreen = () => {
           style: 'destructive',
           onPress: async () => {
             try {
-              const updatedPDFs = [...pickedPDFs];
-              updatedPDFs.splice(index, 1);
-              setPickedPDFs(updatedPDFs);
+              const updatedDocs = [...docs];
+              updatedDocs.splice(index, 1);
+              setPickedPDFs(updatedDocs);
               await AsyncStorage.setItem(
                 'saved_doc_pdfs',
-                JSON.stringify(updatedPDFs),
+                JSON.stringify(updatedDocs),
               );
             } catch (error) {
               console.error('Error deleting PDF:', error);
-              Alert.alert('Error', 'Failed to delete PDF');
+              Alert.alert('Error', 'Failed to delete Document');
             }
           },
         },
@@ -103,9 +107,7 @@ const PDFViewerScreen = () => {
   };
 
   const renderItem = ({item, index}) => (
-    <TouchableOpacity
-      style={styles.item}
-      onPress={() => navigation.navigate('PDFReader', {uri: item.uri})}>
+    <TouchableOpacity style={styles.item} onPress={() => openDOC(item.uri)}>
       <Icon name="file-word-outline" size={30} color="#2D7BDB" />
       <View style={styles.details}>
         <Text style={styles.filename}>{item.name}</Text>
@@ -113,7 +115,7 @@ const PDFViewerScreen = () => {
           {item.size} | {item.date}
         </Text>
       </View>
-      {/* <Icon name="dots-vertical" size={20} color="#555" /> */}
+
       <TouchableOpacity onPress={() => handleDelete(index)}>
         <Icon name="dots-vertical" size={20} color="#fff" />
       </TouchableOpacity>
@@ -137,11 +139,11 @@ const PDFViewerScreen = () => {
       </View>
 
       {/* PDF List */}
-      {pickedPDFs.length === 0 ? (
-        <Text style={styles.noFiles}>No PDFs yet. Search PDF's</Text>
+      {docs.length === 0 ? (
+        <Text style={styles.noFiles}>No PDFs yet. Search Documents</Text>
       ) : (
         <FlatList
-          data={pickedPDFs}
+          data={docs}
           keyExtractor={(item, index) => index.toString()}
           renderItem={renderItem}
           contentContainerStyle={{padding: 10}}
@@ -192,4 +194,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PDFViewerScreen;
+export default DocsViewerScreen;

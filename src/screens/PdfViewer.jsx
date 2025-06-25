@@ -134,7 +134,9 @@ const PDFViewerScreen = () => {
 
       {/* PDF List */}
       {pickedPDFs.length === 0 ? (
-        <Text style={styles.noFiles}>No PDFs yet. Search PDF's</Text>
+        <View style={{flex: 1, backgroundColor: '#0F1417'}}>
+          <Text style={styles.noFiles}>No PDFs yet. Search PDF's</Text>
+        </View>
       ) : (
         <FlatList
           data={pickedPDFs}
@@ -167,7 +169,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 40,
     fontSize: 16,
-    color: '#999',
+    color: '#fff',
   },
   item: {
     flexDirection: 'row',
