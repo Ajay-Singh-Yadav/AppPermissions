@@ -47,6 +47,7 @@ const DocsViewerScreen = () => {
       }
     }
   };
+
   const handleFilePick = async () => {
     try {
       const [file] = await pick({
@@ -80,7 +81,7 @@ const DocsViewerScreen = () => {
   const handleDelete = index => {
     Alert.alert(
       'Delete Document',
-      'Are you sure you want to delete  this Document',
+      'Are you sure you want to delete this Document?',
       [
         {text: 'Cancel', style: 'cancel'},
         {
@@ -90,13 +91,13 @@ const DocsViewerScreen = () => {
             try {
               const updatedDocs = [...docs];
               updatedDocs.splice(index, 1);
-              setPickedPDFs(updatedDocs);
+              setDocs(updatedDocs); // ✅ Fixed here
               await AsyncStorage.setItem(
-                'saved_doc_pdfs',
+                'saved_doc_files',
                 JSON.stringify(updatedDocs),
               );
             } catch (error) {
-              console.error('Error deleting PDF:', error);
+              console.error('Error deleting Document:', error);
               Alert.alert('Error', 'Failed to delete Document');
             }
           },

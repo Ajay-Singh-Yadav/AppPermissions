@@ -7,6 +7,7 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+import Share from 'react-native-share';
 
 const LocationSharingModal = ({
   visible,
@@ -18,6 +19,38 @@ const LocationSharingModal = ({
   region,
   fullAddress,
 }) => {
+  const mapsLink = fullAddress
+    ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+        fullAddress,
+      )}`
+    : `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
+
+  const handleShare = async () => {
+    const message = `📍 Location Details:
+
+Full Address: ${fullAddress || 'N/A'}
+City: ${city || 'N/A'}
+Region: ${region || 'N/A'}
+
+
+🔗 Open in Maps: ${mapsLink}`;
+
+    try {
+      await Share.open({message});
+    } catch (error) {
+      if (error.message !== 'User did not share') {
+        Alert.alert('Error', 'Unable to share location.');
+      }
+    }
+  };
+
+  const handleOpenInMaps = () => {
+    if (mapsLink) {
+      Linking.openURL(mapsLink).catch(err =>
+        Alert.alert('Error', 'Failed to open map link'),
+      );
+    }
+  };
   return (
     <Modal visible={visible} transparent animationType="fade">
       <View style={styles.modalBackground}>
@@ -86,7 +119,9 @@ const LocationSharingModal = ({
               <Text style={styles.close}>Close</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.shareLocation}>
+            <TouchableOpacity
+              style={styles.shareLocation}
+              onPress={handleShare}>
               <Text style={styles.share}>Share</Text>
             </TouchableOpacity>
           </View>
