@@ -14,7 +14,7 @@ import RNFS from 'react-native-fs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
 import Feather from 'react-native-vector-icons/Feather';
-import FileViewer from 'react-native-file-viewer';
+
 import Share from 'react-native-share';
 
 const DocsViewerScreen = () => {

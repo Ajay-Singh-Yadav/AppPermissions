@@ -46,13 +46,39 @@ const LocationSharingModal = ({
             </View>
           </View>
 
-          <Text style={styles.city}>Location: {city || 'N/A'}</Text>
-          <Text style={styles.addressText}>
-            {fullAddress || 'Fetching address...'}
+          <Text style={[styles.city, {fontWeight: '600'}]}>
+            City:{' '}
+            <Text style={[styles.city, {fontWeight: '400', color: '#444'}]}>
+              {city || 'N/A'}
+            </Text>
           </Text>
-          <Text style={styles.region}>Region: {region || 'N/A'}</Text>
-          <Text style={styles.coords}>Latitude: {latitude}</Text>
-          <Text style={styles.coords}>Longitude: {longitude}</Text>
+          <Text style={[styles.region, {fontWeight: '600'}]}>
+            Region:{' '}
+            <Text style={[styles.region, {fontWeight: '400', color: '#444'}]}>
+              {region || 'N/A'}
+            </Text>
+          </Text>
+
+          <Text style={[styles.addressText, {fontSize: 15, fontWeight: '600'}]}>
+            Location:{' '}
+            <Text
+              style={[styles.addressText, {color: '#0070C4', fontSize: 12}]}>
+              {fullAddress || 'Fetching address...'}
+            </Text>
+          </Text>
+
+          <Text style={[styles.coords, {fontWeight: '600'}]}>
+            Latitude:{' '}
+            <Text style={[styles.coords, {fontWeight: '400'}]}>{latitude}</Text>
+          </Text>
+          <Text style={[styles.coords, {fontWeight: '600'}]}>
+            Longitude:{' '}
+            <Text style={[styles.coords, {fontWeight: '400'}]}>
+              {longitude}
+            </Text>
+          </Text>
+
+          <Text style={styles.coords}></Text>
 
           <View
             style={{flexDirection: 'row', justifyContent: 'flex-end', gap: 30}}>
@@ -82,6 +108,10 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 20,
     width: '85%',
+  },
+  addressText: {
+    marginTop: 2,
+    color: '#444',
   },
   title: {
     fontSize: 25,
@@ -127,11 +157,11 @@ const styles = StyleSheet.create({
   city: {
     fontSize: 15,
     marginTop: 10,
-    color: '#000',
+    color: '#444',
   },
   region: {
     fontSize: 15,
-    color: '#000',
+    color: '#444',
   },
   coords: {
     fontSize: 14,
