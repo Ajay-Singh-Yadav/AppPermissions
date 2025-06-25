@@ -40,6 +40,10 @@ const PDFViewerScreen = () => {
         type: [types.pdf],
       });
 
+      if (!file) {
+        return;
+      }
+
       if (file) {
         const destPath = `${RNFS.DocumentDirectoryPath}/${file.name}`;
         await RNFS.copyFile(file.uri, destPath);
@@ -61,9 +65,6 @@ const PDFViewerScreen = () => {
     } catch (err) {
       if (err?.code === 'DOCUMENT_PICKER_CANCELED') {
         Alert.alert('Cancelled', 'File picking cancelled');
-      } else {
-        console.error('DocumentPicker Error:', err);
-        Alert.alert('Error', 'Something went wrong while picking a file');
       }
     }
   };
