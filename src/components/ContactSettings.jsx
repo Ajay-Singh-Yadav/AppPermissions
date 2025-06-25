@@ -5,7 +5,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 
-const ContactSettings = () => {
+const ContactSettings = ({onPress}) => {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Contact settings</Text>
@@ -38,7 +38,7 @@ const ContactSettings = () => {
       />
 
       {/* Share Contact */}
-      <TouchableOpacity style={styles.row}>
+      <TouchableOpacity style={styles.row} onPress={onPress}>
         <Feather name="share-2" size={24} color="#fff" style={styles.icon} />
         <Text style={styles.title}>Share contact</Text>
       </TouchableOpacity>

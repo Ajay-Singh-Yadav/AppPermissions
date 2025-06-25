@@ -23,6 +23,8 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import Geocoder from 'react-native-geocoding';
 Geocoder.init('AIzaSyD3FbslZFCti8Gub5tSiw2WnqSvkRR2Jq8');
 
+import Share from 'react-native-share';
+
 //Icons
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -82,30 +84,23 @@ const ProfileScreen = () => {
     loadProfileImage();
   }, [contact.recordID]);
 
-  // const getLocation = async () => {
-  //   const hasPermission = await requestLocationPermission();
-  //   if (!hasPermission) {
-  //     Alert.alert('Permission Denied', 'Location permission is required.');
-  //     return;
-  //   }
+  const shareContact = async () => {
+    const name = contact.displayName || 'Unnamed';
+    const number =
+      contact.phoneNumbers?.length > 0
+        ? contact.phoneNumbers[0].number
+        : 'No Number';
 
-  //   Geolocation.getCurrentPosition(
-  //     position => {
-  //       setLatitude(position.coords.latitude);
-  //       setLongitude(position.coords.longitude);
-  //       setShowLocationModal(true);
-  //     },
-  //     error => {
-  //       console.warn(error.code, error.message);
-  //       Alert.alert('Error', error.message);
-  //     },
-  //     {
-  //       enableHighAccuracy: true,
-  //       timeout: 15000,
-  //       maximumAge: 10000,
-  //     },
-  //   );
-  // };
+    try {
+      const res = await Share.open({
+        message: `Contact Info:\nName: ${name}\nPhone: ${number}`,
+      });
+    } catch (error) {
+      if (error.message !== 'User did not share') {
+        Alert.alert('Error', 'Failed to share contact');
+      }
+    }
+  };
 
   const getLocation = async () => {
     const hasPermission = await requestLocationPermission();
@@ -337,11 +332,12 @@ const ProfileScreen = () => {
             }}
           />
 
-          <ContactSettings />
+          <ContactSettings onPress={shareContact} />
 
           {/* End Main Container */}
         </View>
       </ScrollView>
+
       <LocationSharingModal
         visible={showLocationModal}
         onClose={() => setShowLocationModal(false)}
