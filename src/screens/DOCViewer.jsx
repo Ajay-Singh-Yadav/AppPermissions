@@ -91,7 +91,7 @@ const DocsViewerScreen = () => {
             try {
               const updatedDocs = [...docs];
               updatedDocs.splice(index, 1);
-              setDocs(updatedDocs); // ✅ Fixed here
+              setDocs(updatedDocs);
               await AsyncStorage.setItem(
                 'saved_doc_files',
                 JSON.stringify(updatedDocs),
